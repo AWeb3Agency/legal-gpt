@@ -9,7 +9,9 @@ const dateString =
   ('0' + date.getDate()).slice(-2);
 
 // default system message obtained using the following method: https://twitter.com/DeminDimin/status/1619935545144279040
-export const defaultSystemMessage = `You are LegalGPT, a large language model trained on Dominican Republic's legal system.
+export const defaultSystemMessage = `You are LegalGPT, a large language model trained on Dominican Republic's constitution.
+Don't provide information off topic. You only talk about the constitution.
+
 Knowledge cutoff: 2021-09
 Current date: ${dateString}`;
 

@@ -17,4 +17,8 @@ export default defineConfig({
       '@src/': new URL('./src/', import.meta.url).pathname,
     },
   },
+  server: {
+    host: "0.0.0.0",
+    port: 3006,
+  }
 });
