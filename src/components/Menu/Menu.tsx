@@ -1,4 +1,6 @@
-import React from 'react';
+import {
+  Link
+} from "react-router-dom";
 
 import NewChat from './NewChat';
 import ChatHistoryList from './ChatHistoryList';
@@ -17,7 +19,7 @@ const Menu = () => {
         <div className='flex h-full min-h-0 flex-col '>
           <div className='scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20'>
             <nav className='flex h-full flex-1 flex-col space-y-1 p-2'>
-              <img src={logo} alt="landing" width={'100px'} style={{ margin: '20px auto' }} />
+            <Link style={{ textAlign: 'center' }} to="/"><img src={logo} alt="landing" width={'100px'} style={{ margin: '20px auto' }} /></Link>
               <NewChat />
               <ChatHistoryList />
               <MenuOptions />
