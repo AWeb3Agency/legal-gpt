@@ -7,7 +7,7 @@ import ChatHistoryList from './ChatHistoryList';
 import MenuOptions from './MenuOptions';
 import CrossIcon2 from '@icon/CrossIcon2';
 
-import logo from '../../assets/branding/logo.png';
+import logo from '../../assets/branding/logo_app.svg';
 
 const Menu = () => {
   return (
@@ -19,7 +19,9 @@ const Menu = () => {
         <div className='flex h-full min-h-0 flex-col '>
           <div className='scrollbar-trigger flex h-full w-full flex-1 items-start border-white/20'>
             <nav className='flex h-full flex-1 flex-col space-y-1 p-2'>
-            <Link style={{ textAlign: 'center' }} to="/"><img src={logo} alt="landing" width={'100px'} style={{ margin: '20px auto' }} /></Link>
+              <Link style={{ textAlign: 'center' }} to="/">
+                <img src={logo} alt="landing" width={'75px'} style={{ margin: '20px auto' }} />
+              </Link>
               <NewChat />
               <ChatHistoryList />
               <MenuOptions />

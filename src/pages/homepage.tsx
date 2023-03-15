@@ -1,12 +1,16 @@
 import { useEffect } from 'react';
 import useStore from '@store/store';
-import {
-    Link,
-  } from "react-router-dom";
 
 import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
+import Header from '../components/Header';
+import Hero from '@components/Hero';
+import Intro from '@components/Intro';
+import Highlights from '@components/Highlights';
+import Trending from '@components/Trending';
+import Categories from '@components/Categories';
+import Footer from '@components/Footer';
 
 function ChatPage() {
   const initialiseNewChat = useInitialiseNewChat();
@@ -65,14 +69,14 @@ function ChatPage() {
   }, []);
 
   return (
-    <div className='overflow-hidden w-full h-full relative'>
-      <nav>
-          <ul>
-            <li>
-            <Link to={`/chat`}>chat</Link>
-            </li>
-          </ul>
-        </nav>
+    <div className=''>
+      <Header />
+      <Hero />
+      <Intro />
+      <Highlights />
+      <Trending />
+      <Categories />
+      <Footer />
     </div>
   );
 }
