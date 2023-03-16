@@ -14,6 +14,7 @@ const NewMessageButton = React.memo(
 
     const addChat = () => {
       const chats = useStore.getState().chats;
+      // TODO: get model info stored from DB and pass to generateDefaultChat
       if (chats) {
         const updatedChats: ChatInterface[] = JSON.parse(JSON.stringify(chats));
         let titleIndex = 1;

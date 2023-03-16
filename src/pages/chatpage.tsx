@@ -8,7 +8,12 @@ import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
 
+import { Routes, Route, useParams } from 'react-router-dom';
+
 function ChatPage() {
+  let { chatId } = useParams();
+  localStorage.setItem('chatId', JSON.stringify(chatId));
+
   // here we have all the model's configuration
   const initialiseNewChat = useInitialiseNewChat();
   const setChats = useStore((state) => state.setChats);

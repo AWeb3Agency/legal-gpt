@@ -32,21 +32,21 @@ const validateMessage = (messages: MessageInterface[]) => {
 };
 
 const validateAndFixChatConfig = (config: ConfigInterface) => {
-  if (config === undefined) config = defaultChatConfig;
+  if (config === undefined) config = defaultChatConfig();
   if (!(typeof config === 'object')) return false;
 
-  if (!config.temperature) config.temperature = defaultChatConfig.temperature;
+  if (!config.temperature) config.temperature = defaultChatConfig().temperature;
   if (!(typeof config.temperature === 'number')) return false;
 
   if (!config.presence_penalty)
-    config.presence_penalty = defaultChatConfig.presence_penalty;
+    config.presence_penalty = defaultChatConfig().presence_penalty;
   if (!(typeof config.presence_penalty === 'number')) return false;
 
-  if (!config.top_p) config.top_p = defaultChatConfig.top_p;
+  if (!config.top_p) config.top_p = defaultChatConfig().top_p;
   if (!(typeof config.top_p === 'number')) return false;
 
   if (!config.frequency_penalty)
-    config.frequency_penalty = defaultChatConfig.frequency_penalty;
+    config.frequency_penalty = defaultChatConfig().frequency_penalty;
   if (!(typeof config.frequency_penalty === 'number')) return false;
 
   return true;

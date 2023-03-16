@@ -28,7 +28,7 @@ export default function Highlights() {
                     </dt>
                     <dd className="mt-2 text-base leading-7 text-gray-600">{'La Constitución de la República Dominicana es la norma suprema del país y fue promulgada por primera vez en 1844. A lo largo de su historia, ha sido objeto de varias reformas y enmiendas, siendo la versión actual promulgada en 2015. '}</dd>
                     <dd className="mt-2 text-base leading-7 text-gray-600">
-                        <Link to="/chat" className="text-sm font-semibold text-gray-900">
+                        <Link to="/chat/123456" className="text-sm font-semibold text-gray-900">
                             Interrogar Documento<span aria-hidden="true">&rarr;</span>
                         </Link>
                     </dd>

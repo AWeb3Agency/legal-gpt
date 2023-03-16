@@ -11,7 +11,7 @@ import defaultPrompts from '@constants/prompt';
 export const migrateV0 = (persistedState: LocalStorageInterfaceV0ToV1) => {
   persistedState.chats.forEach((chat) => {
     chat.titleSet = false;
-    if (!chat.config) chat.config = { ...defaultChatConfig };
+    if (!chat.config) chat.config = { ...defaultChatConfig() };
   });
 };
 
@@ -27,8 +27,8 @@ export const migrateV2 = (persistedState: LocalStorageInterfaceV2ToV3) => {
   persistedState.chats.forEach((chat) => {
     chat.config = {
       ...chat.config,
-      top_p: defaultChatConfig.top_p,
-      frequency_penalty: defaultChatConfig.frequency_penalty,
+      top_p: defaultChatConfig().top_p,
+      frequency_penalty: defaultChatConfig().frequency_penalty,
     };
   });
   persistedState.autoTitle = false;

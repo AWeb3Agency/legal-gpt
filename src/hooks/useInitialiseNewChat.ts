@@ -3,7 +3,10 @@ import useStore from '@store/store';
 import { MessageInterface } from '@type/chat';
 import { generateDefaultChat } from '@constants/chat';
 
-const useInitialiseNewChat = () => {
+const useInitialiseNewChat = (chatId?: string) => {
+
+  // TODO: make a call to DB to set model and pass values to generateDefaultChat
+
   const setChats = useStore((state) => state.setChats);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
 

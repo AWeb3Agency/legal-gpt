@@ -24,13 +24,13 @@ const useSubmit = () => {
       data = await getChatCompletion(
         useStore.getState().apiEndpoint,
         message,
-        defaultChatConfig
+        defaultChatConfig()
       );
     } else if (apiKey) {
       data = await getChatCompletion(
         useStore.getState().apiEndpoint,
         message,
-        defaultChatConfig,
+        defaultChatConfig(),
         apiKey
       );
     }

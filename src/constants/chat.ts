@@ -15,19 +15,31 @@ Don't provide information off topic. You only talk about the constitution.
 Knowledge cutoff: 2021-09
 Current date: ${dateString}`;
 
-export const defaultChatConfig: ConfigInterface = {
-  temperature: 1,
-  presence_penalty: 0,
-  top_p: 1,
-  frequency_penalty: 0
+export const defaultChatConfig = (): ConfigInterface => {
+  return {
+    temperature: 1,
+    presence_penalty: 0,
+    top_p: 1,
+    frequency_penalty: 0
+  };
 };
 
-export const generateDefaultChat = (title?: string): ChatInterface => ({
-  title: title ? title : 'New Chat',
-  messages: [{ role: 'system', content: defaultSystemMessage }],
-  config: { ...defaultChatConfig },
-  titleSet: false,
-});
+export const generateDefaultChat = (title?: string): ChatInterface => {
+  const chatId = localStorage.getItem('chatId');
+
+  console.log(chatId);
+  // TODO: 
+  // - check if localstorage to check for chatSettings, if not present:
+  //   - call DB and get settings
+  //   - set localstorage chatSetting (be sure to attach to correct chatId, user can have multiple chats save)
+
+  return {
+    title: title ? title : 'New Chat',
+    messages: [{ role: 'system', content: defaultSystemMessage }],
+    config: { ...defaultChatConfig() },
+    titleSet: false,
+  }
+};
 
 export const codeLanguageSubset = [
   'python',
