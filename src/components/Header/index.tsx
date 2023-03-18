@@ -1,5 +1,6 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
+import './index.css';
 
 const navigation = [
   { name: 'Acerca de', href: '/acerca-de', current: false },

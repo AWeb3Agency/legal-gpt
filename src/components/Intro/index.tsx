@@ -1,28 +1,29 @@
-import { ArrowPathIcon, CloudArrowUpIcon, FingerPrintIcon, LockClosedIcon } from '@heroicons/react/24/outline'
+import { ChatBubbleBottomCenterTextIcon, ClockIcon, FingerPrintIcon, BanknotesIcon } from '@heroicons/react/24/outline'
+import './index.css';
 
 const features = [
   {
-    name: 'Push to deploy',
+    name: 'Accesibilidad',
     description:
-      'Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.',
-    icon: CloudArrowUpIcon,
+      'Legal GPT está disponible en línea las 24 horas del día, los 7 días de la semana, lo que significa que puedes acceder a él desde cualquier lugar y en cualquier momento.',
+    icon: ClockIcon,
   },
   {
-    name: 'SSL certificates',
+    name: 'Ahorro de Tiempo y Dinero',
     description:
-      'Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.',
-    icon: LockClosedIcon,
+      'Legal GPT te ahorra tiempo y dinero en el proceso de obtener respuestas a tus preguntas legales.',
+    icon: BanknotesIcon,
   },
   {
-    name: 'Simple queues',
+    name: 'Respuestas Precisas',
     description:
-      'Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.',
-    icon: ArrowPathIcon,
+      'Los modelos ChatGPT utilizados por Legal GPT están específicamente entrenados para responder preguntas legales, lo que significa que puedes estar seguro de que las respuestas que obtienes son precisas y confiables.',
+    icon: ChatBubbleBottomCenterTextIcon,
   },
   {
-    name: 'Advanced security',
+    name: 'Personalización',
     description:
-      'Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.',
+      'Legal GPT puede adaptarse a tus necesidades específicas y responder a tus preguntas de manera personalizada. Además, puedes agregar tus propios documentos legales para obtener respuestas más precisas y personalizadas.',
     icon: FingerPrintIcon,
   },
 ]
@@ -30,15 +31,16 @@ const features = [
 export default function Intro() {
   return (
     <div className="bg-white py-24 sm:py-32">
+      <div className='wiki_image'></div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
-          <h2 className="text-base font-semibold leading-7 text-indigo-600">Deploy faster</h2>
+          <h2 className="text-base font-semibold leading-7 text-gray-500">Tu Asistente Virtual en la Nube</h2>
           <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Everything you need to deploy your app
+            Descubre Cómo Legal GPT Puede Simplificar Tu Vida
           </p>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Quis tellus eget adipiscing convallis sit sit eget aliquet quis. Suspendisse eget egestas a elementum
-            pulvinar et feugiat blandit at. In mi viverra elit nunc.
+            Legal GPT es una plataforma en línea que te permite acceder a modelos ChatGPT específicamente entrenados para responder preguntas sobre temas legales. Con Legal GPT, no es necesario gastar tiempo para obtener respuestas a tus preguntas legales.{' '}
+            <b>¡Legal GPT lo hace por ti!</b>
           </p>
         </div>
         <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
@@ -46,7 +48,7 @@ export default function Intro() {
             {features.map((feature) => (
               <div key={feature.name} className="relative pl-16">
                 <dt className="text-base font-semibold leading-7 text-gray-900">
-                  <div className="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600">
+                  <div className="absolute top-0 left-0 flex h-10 w-10 items-center justify-center rounded-lg bg-black">
                     <feature.icon className="h-6 w-6 text-white" aria-hidden="true" />
                   </div>
                   {feature.name}
