@@ -1,6 +1,7 @@
 import { useState, Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import './index.css';
+// @ts-ignore
 import { supabase } from '../../utils/supabaseClient'
 import GoogleIcon from '../../assets/icons/GoogleIcon.png'
 
