@@ -1,6 +1,8 @@
-import { Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import './index.css';
+import { supabase } from '../../utils/supabaseClient'
+import GoogleIcon from '../../assets/icons/GoogleIcon.png'
 
 const navigation = [
   { name: 'Acerca de', href: '/acerca-de', current: false },
@@ -13,6 +15,60 @@ function classNames(...classes: string[]) {
 }
 
 export default function Header() {
+  const [loading, setLoading] = useState(false)
+  const [user, setUser] = useState('') as any
+
+  const [session, setSession] = useState(null)
+
+  useEffect(() => {
+    supabase.auth.getSession().then((data: any) => {
+      setSession(data.session)
+      setUser(data.session.user)
+    })
+
+    supabase.auth.onAuthStateChange((_event: any, session: any) => {
+      setSession(session)
+      setUser(session?.user ? session.user : {})
+    })
+  }, [])
+
+  const handleLogin = async (event: any) => {
+    console.log(session, user);
+    
+    if (session) return;
+    event.preventDefault()
+
+    setLoading(true)
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    })
+
+    if (error) {
+      alert(error.error_description || error.message)
+    } else {
+      console.log(data);
+    }
+    setLoading(false)
+  }
+
+  const handleLogout = async (event: any) => {
+    setLoading(true)
+    const { data, error } = await supabase.auth.signOut()
+    if (error) {
+      alert(error.error_description || error.message)
+    } else {
+      console.log(data);
+      
+    }
+    setUser('')
+    setLoading(false)
+  }
+
+  useEffect(()=>{
+    console.log(session);
+  }, [session])
+  
+
   return (
     <Disclosure as="nav" className="">
       {({ open }) => (
@@ -52,13 +108,26 @@ export default function Header() {
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative ml-3">
                   <div>
-                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <Menu.Button className="flex rounded-full login-icon text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                        alt=""
-                      />
+                      <span onClick={handleLogin} >
+                        {
+                          user?.user_metadata?.avatar_url &&
+                          <img
+                          className="h-8 w-8 rounded-full"
+                          src={user.user_metadata.avatar_url}
+                          alt=""
+                        />  
+                        }
+                        {
+                          !user &&
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src={GoogleIcon}
+                            alt=""
+                          />
+                        }
+                      </span>
                     </Menu.Button>
                   </div>
                   <Transition
@@ -95,6 +164,7 @@ export default function Header() {
                         {({ active }) => (
                           <a
                             href="#"
+                            onClick={handleLogout}
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Sign out
