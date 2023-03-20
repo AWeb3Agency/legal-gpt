@@ -1,56 +1,42 @@
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react'
+// @ts-ignore
+import { supabase } from '../../utils/supabaseClient'
+import './index.css';
+import {
+    Link,
+  } from "react-router-dom";
 
 import $ from 'jquery';
 import './index.css';
 
-import Thumb from '../../assets/placeholders/thumb-example.jpeg';
-const items = [
-  {
-    id: 1,
-    name: 'Escrituras públicas de propiedad',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Chat ahora',
-  },
-  {
-    id: 2,
-    name: 'Actas de nacimiento,',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Chat ahora',
-  },
-  {
-    id: 3,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Chat ahora',
-  },
-  {
-    id: 4,
-    name: 'Basic Tee',
-    href: '#',
-    imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-    imageAlt: "Front of men's Basic Tee in black.",
-    price: '$35',
-    color: 'Chat ahora',
-  },
-]
-
 export default function Categories() {
+  const [loading, setLoading] = useState(true)
+  const [categories, setCategorias] = useState([]) as any;
+
+  useEffect(() => {
+    getItems();
+  }, []);
+
+  async function getItems() {
+    const { data } = await supabase
+      .from("Categories")
+      .select()
+      .limit(5);
+      
+    setCategorias(data);
+    setLoading(false);
+    console.log(categories);
+  }
+
   useEffect(() => {
     $(".option").hover(function(e: any){
       $(".option").removeClass("active");
       $(e.currentTarget).addClass("active");   
     });
-  }, []);
+  }, [categories]);
+
+
   return (
     <div className="bg-white py-24 sm:py-16 sm:pt-0">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -65,66 +51,27 @@ export default function Categories() {
 
         <div className="mx-auto max-w-2xl mt-10 mb-12 lg:max-w-4xl">
         <div className="options">
-          <div className="option active" style={{ backgroundImage: `url(${Thumb})` }}>
-            <div className="shadow" />
-            <div className="label">
-              <div className="icon">
-                <i className="fas fa-walking" />
-              </div>
-              <div className="info">
-                <div className="main">Blonkisoaz</div>
-                <div className="sub">Omuke trughte a otufta</div>
-              </div>
-            </div>
-          </div>
-          <div className="option" style={{ backgroundImage: `url(${Thumb})` }}>
-            <div className="shadow" />
-            <div className="label">
-              <div className="icon">
-                <i className="fas fa-snowflake" />
-              </div>
-              <div className="info">
-                <div className="main">Oretemauw</div>
-                <div className="sub">Omuke trughte a otufta</div>
-              </div>
-            </div>
-          </div>
-          <div className="option" style={{ backgroundImage: `url(${Thumb})` }}>
-            <div className="shadow" />
-            <div className="label">
-              <div className="icon">
-                <i className="fas fa-tree" />
-              </div>
-              <div className="info">
-                <div className="main">Iteresuselle</div>
-                <div className="sub">Omuke trughte a otufta</div>
-              </div>
-            </div>
-          </div>
-          <div className="option" style={{ backgroundImage: `url(${Thumb})` }}>
-            <div className="shadow" />
-            <div className="label">
-              <div className="icon">
-                <i className="fas fa-tint" />
-              </div>
-              <div className="info">
-                <div className="main">Idiefe</div>
-                <div className="sub">Omuke trughte a otufta</div>
-              </div>
-            </div>
-          </div>
-          <div className="option" style={{ backgroundImage: `url(${Thumb})` }}>
-            <div className="shadow" />
-            <div className="label">
-              <div className="icon">
-                <i className="fas fa-sun" />
-              </div>
-              <div className="info">
-                <div className="main">Inatethi</div>
-                <div className="sub">Omuke trughte a otufta</div>
-              </div>
-            </div>
-          </div>
+
+          {
+            !loading && categories.map((category: any, i: number) => {
+              const active = i === 0 ? 'active' : null
+              return (
+                <div className={`option ${active}`} style={{ backgroundImage: `url(${category.cover})` }}>
+                  <div className="shadow" />
+                  <div className="label">
+                    <div className="icon">
+                      <i className="fas fa-walking" />
+                    </div>
+                    <div className="info">
+                      <div className="main">{ category.name }</div>
+                      <div className="sub">{ category.description.substring(0,45) + '...' }</div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          }
+
         </div>
         </div>
       </div>

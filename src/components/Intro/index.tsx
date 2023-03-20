@@ -1,4 +1,4 @@
-import { ChatBubbleBottomCenterTextIcon, ClockIcon, FingerPrintIcon, BanknotesIcon } from '@heroicons/react/24/outline'
+import { ChatBubbleBottomCenterTextIcon, ClockIcon, FingerPrintIcon, LockClosedIcon } from '@heroicons/react/24/outline'
 import './index.css';
 
 const features = [
@@ -9,10 +9,10 @@ const features = [
     icon: ClockIcon,
   },
   {
-    name: 'Ahorro de Tiempo y Dinero',
+    name: 'Seguridad y privacidad',
     description:
-      'Legal GPT te ahorra tiempo y dinero en el proceso de obtener respuestas a tus preguntas legales.',
-    icon: BanknotesIcon,
+      'Legal GPT se enorgullece de proporcionar un entorno seguro y privado para sus usuarios. Todas las conversaciones se almacenan en el navegador del usuario, lo que significa que Legal GPT nunca tiene acceso a las conversaciones entre el usuario y el modelo de chat GPT.',
+    icon: LockClosedIcon,
   },
   {
     name: 'Respuestas Precisas',
