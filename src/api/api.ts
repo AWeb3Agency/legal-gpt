@@ -1,4 +1,5 @@
 import { ConfigInterface, MessageInterface } from '@type/chat';
+import useStore from '@store/store';
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -10,12 +11,12 @@ export const getChatCompletion = async (
     'Content-Type': 'application/json',
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
-
+  const currentmodel = useStore.getState().currentmodel;
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      model: 'gpt-3.5-turbo',
+      model: currentmodel.model,
       messages,
       ...config,
     }),
@@ -36,12 +37,12 @@ export const getChatCompletionStream = async (
     'Content-Type': 'application/json',
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
-
+  const currentmodel = useStore.getState().currentmodel;
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      model: 'gpt-3.5-turbo',
+      model: currentmodel.model,
       messages,
       ...config,
       stream: true,

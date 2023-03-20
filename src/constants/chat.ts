@@ -1,4 +1,5 @@
 import { ChatInterface, ConfigInterface } from '@type/chat';
+import useStore from '@store/store';
 
 const date = new Date();
 const dateString =
@@ -16,26 +17,20 @@ Knowledge cutoff: 2021-09
 Current date: ${dateString}`;
 
 export const defaultChatConfig = (): ConfigInterface => {
+  const currentmodel = useStore.getState().currentmodel;
   return {
-    temperature: 1,
-    presence_penalty: 0,
-    top_p: 1,
-    frequency_penalty: 0
+    temperature: currentmodel.temperature,
+    presence_penalty: currentmodel.presence_penalty,
+    top_p: currentmodel.top_p,
+    frequency_penalty: currentmodel.frequency_penalty
   };
 };
 
 export const generateDefaultChat = (title?: string): ChatInterface => {
-  const chatId = localStorage.getItem('chatId');
-
-  console.log(chatId);
-  // TODO: 
-  // - check if localstorage to check for chatSettings, if not present:
-  //   - call DB and get settings
-  //   - set localstorage chatSetting (be sure to attach to correct chatId, user can have multiple chats save)
-
+  const currentmodel = useStore.getState().currentmodel;
   return {
     title: title ? title : 'New Chat',
-    messages: [{ role: 'system', content: defaultSystemMessage }],
+    messages: [{ role: 'system', content: currentmodel.default_system_message }],
     config: { ...defaultChatConfig() },
     titleSet: false,
   }

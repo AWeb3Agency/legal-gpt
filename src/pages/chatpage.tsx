@@ -1,79 +1,49 @@
-import React, { useEffect } from 'react';
-import useStore from '@store/store';
+import React, { useEffect, useState } from 'react';
+// @ts-ignore
+import { supabase } from '../utils/supabaseClient'
 
 import Chat from '@components/Chat';
 import Menu from '@components/Menu';
 
-import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
-import { ChatInterface } from '@type/chat';
-import { Theme } from '@type/theme';
-
-import { Routes, Route, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function ChatPage() {
   let { chatId } = useParams();
-  localStorage.setItem('chatId', JSON.stringify(chatId));
+  const [model, setModel] = useState('')
+  const [loading, setLoading] = useState(true)
+  
+  async function getModel() {
+    const { data } = await supabase
+      .from("Models")
+      .select()
+      .eq('id', chatId)
+      .limit(1);
 
-  // here we have all the model's configuration
-  const initialiseNewChat = useInitialiseNewChat();
-  const setChats = useStore((state) => state.setChats);
-  const setTheme = useStore((state) => state.setTheme);
-  const setApiKey = useStore((state) => state.setApiKey);
-  const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
+    setModel(data[0]);
+    setLoading(false);
+  }
 
-  useEffect(() => {
-    // legacy local storage
-    const oldChats = localStorage.getItem('chats');
-    const apiKey = localStorage.getItem('apiKey');
-    const theme = localStorage.getItem('theme');
-
-    if (apiKey) {
-      // legacy local storage
-      setApiKey(apiKey);
-      localStorage.removeItem('apiKey');
-    }
-
-    if (theme) {
-      // legacy local storage
-      setTheme(theme as Theme);
-      localStorage.removeItem('theme');
-    }
-
-    if (oldChats) {
-      // legacy local storage
-      try {
-        const chats: ChatInterface[] = JSON.parse(oldChats);
-        if (chats.length > 0) {
-          setChats(chats);
-          setCurrentChatIndex(0);
-        } else {
-          initialiseNewChat();
-        }
-      } catch (e: unknown) {
-        console.log(e);
-        initialiseNewChat();
-      }
-      localStorage.removeItem('chats');
-    } else {
-      // existing local storage
-      const chats = useStore.getState().chats;
-      const currentChatIndex = useStore.getState().currentChatIndex;
-      if (!chats || chats.length === 0) {
-        initialiseNewChat();
-      }
-      if (
-        chats &&
-        !(currentChatIndex >= 0 && currentChatIndex < chats.length)
-      ) {
-        setCurrentChatIndex(0);
-      }
-    }
-  }, []);
+  !model && getModel()
 
   return (
     <div className='overflow-hidden w-full h-full relative'>
-      <Menu />
-      <Chat />
+      {
+        loading &&
+        <p>Loading...</p>
+      }
+      {
+        !loading && !model &&
+        <div className='flex h-full flex-1 flex-col md:pl-[260px]'>
+          <p>Model Not Found</p>
+        </div>
+      }
+      {
+        !loading && model &&
+        <>
+          <Menu />
+          <Chat model={model} />
+        </>
+      }
     </div>
   );
 }

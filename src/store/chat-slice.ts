@@ -6,16 +6,19 @@ export interface ChatSlice {
   chats?: ChatInterface[];
   currentChatIndex: number;
   generating: boolean;
+  currentmodel: any;
   error: string;
   setMessages: (messages: MessageInterface[]) => void;
   setChats: (chats: ChatInterface[]) => void;
   setCurrentChatIndex: (currentChatIndex: number) => void;
+  setCurrentModel: (currentmodel: any) => void;
   setGenerating: (generating: boolean) => void;
   setError: (error: string) => void;
 }
 
 export const createChatSlice: StoreSlice<ChatSlice> = (set, get) => ({
   messages: [],
+  currentmodel: '',
   currentChatIndex: -1,
   generating: false,
   error: '',
@@ -29,6 +32,12 @@ export const createChatSlice: StoreSlice<ChatSlice> = (set, get) => ({
     set((prev: ChatSlice) => ({
       ...prev,
       chats: chats,
+    }));
+  },
+  setCurrentModel: (currentmodel: number) => {
+    set((prev: ChatSlice) => ({
+      ...prev,
+      currentmodel: currentmodel
     }));
   },
   setCurrentChatIndex: (currentChatIndex: number) => {

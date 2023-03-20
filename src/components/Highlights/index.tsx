@@ -50,7 +50,7 @@ export default function Highlights() {
                       { model.description ? model.description : 'Loading...' }
                     </dd>
                     <dd className="mt-2 text-base leading-7 text-gray-600">
-                        <Link to="/chat/123456" className="text-sm font-semibold text-gray-900">
+                        <Link to={`/chat/${model.id}`} className="text-sm font-semibold text-gray-900">
                         { model ? 'Interrogar Documento ' : 'Loading... ' }<span aria-hidden="true">&rarr;</span>
                         </Link>
                     </dd>
