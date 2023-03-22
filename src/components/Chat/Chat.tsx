@@ -5,6 +5,7 @@ import ChatContent from './ChatContent';
 import MobileBar from '../MobileBar';
 import StopGeneratingButton from '@components/StopGeneratingButton/StopGeneratingButton';
 import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
+import useSaveToLocalStorage from '@hooks/useSaveToLocalStorage';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
 
@@ -13,7 +14,8 @@ const Chat = (model: any) => {
   const setCurrentModel = useStore((state) => state.setCurrentModel);
   // TODO: fix object
   setCurrentModel(model.model);
-  console.log(model);
+  // console.log(model);
+  useSaveToLocalStorage();
   
   const initialiseNewChat = useInitialiseNewChat();
   const setChats = useStore((state) => state.setChats);
@@ -21,9 +23,12 @@ const Chat = (model: any) => {
   const setApiKey = useStore((state) => state.setApiKey);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
 
+  // clean up chats before initializing
+  // TODO: figure out how to handle multiple rooms
+
   useEffect(() => {
     // legacy local storage
-    const oldChats = localStorage.getItem('chats');
+    const oldChats = localStorage.getItem(`chats_${model.model.id}`) as any;
     const apiKey = localStorage.getItem('apiKey');
     const theme = localStorage.getItem('theme');
 
@@ -39,34 +44,18 @@ const Chat = (model: any) => {
       localStorage.removeItem('theme');
     }
 
-    if (oldChats) {
-      // legacy local storage
-      try {
-        const chats: ChatInterface[] = JSON.parse(oldChats);
-        if (chats.length > 0) {
-          setChats(chats);
-          setCurrentChatIndex(0);
-        } else {
-          initialiseNewChat();
-        }
-      } catch (e: unknown) {
-        console.log(e);
-        initialiseNewChat();
-      }
-      localStorage.removeItem('chats');
-    } else {
-      // existing local storage
-      const chats = useStore.getState().chats;
-      const currentChatIndex = useStore.getState().currentChatIndex;
-      if (!chats || chats.length === 0) {
-        initialiseNewChat();
-      }
-      if (
-        chats &&
-        !(currentChatIndex >= 0 && currentChatIndex < chats.length)
-      ) {
+    // legacy local storage
+    try {
+      const chats: ChatInterface[] = JSON.parse(oldChats);
+      if (chats.length > 0) {
+        setChats(chats);
         setCurrentChatIndex(0);
+      } else {
+        initialiseNewChat();
       }
+    } catch (e: unknown) {
+      console.log(e);
+      initialiseNewChat();
     }
   }, []);
 

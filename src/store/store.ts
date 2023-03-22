@@ -34,7 +34,7 @@ const useStore = create<StoreState>()(
       ...createPromptSlice(set, get),
     }),
     {
-      name: 'free-chat-gpt',
+      name: 'legal-gpt-store',
       partialize: (state) => ({
         chats: state.chats,
         currentChatIndex: state.currentChatIndex,
