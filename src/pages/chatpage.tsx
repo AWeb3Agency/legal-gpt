@@ -59,7 +59,7 @@ function ChatPage() {
         </div>
       }
       {
-        !loading && !session_obj?.user.id &&
+        !loading && !session_obj?.user?.id &&
         <div className='flex  flex-col h-full flex-1 justify-center items-center'>
           <Link to={'/'}><img src={logo} alt="logo" width={'75px'} style={{ marginBottom: 25 }} /></Link>
           <p>You're not logged in.</p>
