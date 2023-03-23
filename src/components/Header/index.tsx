@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import './index.css';
 // @ts-ignore
@@ -19,23 +19,32 @@ export default function Header() {
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState('') as any
 
-  const [session, setSession] = useState(null)
+  const [session, setSession] = React.useState(
+    localStorage.getItem("session")
+  ) as any;
 
-  useEffect(() => {
-    supabase.auth.getSession().then((data: any) => {
-      setSession(data.session)
-      setUser(data.session.user)
-    })
+  React.useEffect(() => {
+    if (!session) return
+    localStorage.setItem("session", JSON.stringify(session));
+    const session_obj = typeof session === 'string' ? JSON.parse(session) : session
+    setSession(session_obj)
+    setUser(session_obj?.user ? session_obj.user : {})
+  }, [session]);
 
-    supabase.auth.onAuthStateChange((_event: any, session: any) => {
-      setSession(session)
-      setUser(session?.user ? session.user : {})
-    })
-  }, [])
+  React.useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event: any, _session: any) => {
+        console.log(`Supbase auth event: ${event}`);
+        setSession(_session);
+        setUser(_session?.user ? _session.user : {})
+      }
+    );
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
+  }, [session]);
 
   const handleLogin = async (event: any) => {
-    console.log(session, user);
-    
     if (session) return;
     event.preventDefault()
 
@@ -57,18 +66,15 @@ export default function Header() {
     const { data, error } = await supabase.auth.signOut()
     if (error) {
       alert(error.error_description || error.message)
-    } else {
-      console.log(data);
-      
-    }
+    } 
+    
+    
+    console.log(data);
+    localStorage.clear();
+    // localStorage.removeItem("session");
     setUser('')
     setLoading(false)
   }
-
-  useEffect(()=>{
-    console.log(session);
-  }, [session])
-  
 
   return (
     <Disclosure as="nav" className="">

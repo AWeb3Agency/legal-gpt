@@ -2,6 +2,7 @@ import { defaultAPIEndpoint } from '@constants/auth';
 import { StoreSlice } from './store';
 
 export interface AuthSlice {
+  user?: {},
   apiKey?: string;
   apiFree: boolean;
   apiEndpoint: string;
@@ -11,6 +12,7 @@ export interface AuthSlice {
 }
 
 export const createAuthSlice: StoreSlice<AuthSlice> = (set, get) => ({
+  user: {},
   apiFree: true,
   apiEndpoint: defaultAPIEndpoint,
   setApiKey: (apiKey: string) => {
@@ -29,6 +31,12 @@ export const createAuthSlice: StoreSlice<AuthSlice> = (set, get) => ({
     set((prev: AuthSlice) => ({
       ...prev,
       apiEndpoint: apiEndpoint,
+    }));
+  },
+  setUser: (user: {}) => {
+    set((prev: AuthSlice) => ({
+      ...prev,
+      user: user,
     }));
   },
 });

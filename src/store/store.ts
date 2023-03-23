@@ -44,6 +44,7 @@ const useStore = create<StoreState>()(
         theme: state.theme,
         autoTitle: state.autoTitle,
         prompts: state.prompts,
+        user: state.user
       }),
       version: 4,
       migrate: (persistedState, version) => {

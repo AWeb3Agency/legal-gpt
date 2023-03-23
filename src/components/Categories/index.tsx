@@ -26,7 +26,6 @@ export default function Categories() {
       
     setCategorias(data);
     setLoading(false);
-    console.log(categories);
   }
 
   useEffect(() => {
