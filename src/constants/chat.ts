@@ -9,12 +9,6 @@ const dateString =
   '-' +
   ('0' + date.getDate()).slice(-2);
 
-// default system message obtained using the following method: https://twitter.com/DeminDimin/status/1619935545144279040
-export const defaultSystemMessage = `You are LegalGPT, a large language model trained on Dominican Republic's constitution.
-Don't provide information off topic. You only talk about the constitution.
-
-Knowledge cutoff: 2021-09
-Current date: ${dateString}`;
 
 export const defaultChatConfig = (): ConfigInterface => {
   const currentmodel = useStore.getState().currentmodel;
@@ -28,9 +22,10 @@ export const defaultChatConfig = (): ConfigInterface => {
 
 export const generateDefaultChat = (title?: string): ChatInterface => {
   const currentmodel = useStore.getState().currentmodel;
+  
   return {
     title: title ? title : 'New Chat',
-    messages: [{ role: 'system', content: currentmodel.default_system_message }],
+    messages: currentmodel.model_messages,
     config: { ...defaultChatConfig() },
     titleSet: false,
   }
