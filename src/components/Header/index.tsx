@@ -71,7 +71,6 @@ export default function Header() {
     
     console.log(data);
     localStorage.clear();
-    // localStorage.removeItem("session");
     setUser('')
     setLoading(false)
   }

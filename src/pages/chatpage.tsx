@@ -33,7 +33,7 @@ function ChatPage() {
   }
 
   async function getSuscription() {
-    if (!session_obj.user.id) return;
+    if (!session_obj?.user?.id) return;
     const { data } = await supabase
       .from("Subscription")
       .select()
