@@ -55,18 +55,18 @@ export default function Categories() {
             !loading && categories.map((category: any, i: number) => {
               const active = i === 0 ? 'active' : null
               return (
-                <div className={`option ${active}`} style={{ backgroundImage: `url(${category.cover})` }}>
-                  <div className="shadow" />
-                  <div className="label">
-                    <div className="icon">
-                      <i className="fas fa-walking" />
+                <Link to={`/category/${category.id}`} className={`option ${active}`} style={{ backgroundImage: `url(${category.cover})` }}>
+                    <div className="shadow" />
+                    <div className="label">
+                      <div className="icon">
+                        <i className="fas fa-walking" />
+                      </div>
+                      <div className="info">
+                        <div className="main">{ category.name }</div>
+                        <div className="sub">{ category.description.substring(0,45) + '...' }</div>
+                      </div>
                     </div>
-                    <div className="info">
-                      <div className="main">{ category.name }</div>
-                      <div className="sub">{ category.description.substring(0,45) + '...' }</div>
-                    </div>
-                  </div>
-                </div>
+                </Link>
               )
             })
           }

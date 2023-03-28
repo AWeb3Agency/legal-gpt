@@ -8,6 +8,7 @@ import {
 // pages
 import ChatPage from './pages/chatpage';
 import HomePage from './pages/homepage';
+import Category from './pages/categories';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/chat/:chatId",
     element: <ChatPage />,
+  },
+  {
+    path: "/category/:categoryId",
+    element: <Category />,
   },
 ]);
 
