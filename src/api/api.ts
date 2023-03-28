@@ -1,5 +1,6 @@
 import { ConfigInterface, MessageInterface } from '@type/chat';
 import useStore from '@store/store';
+export const endpoint_embedding = 'https://api.openai.com/v1/embeddings';
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -65,4 +66,25 @@ export const getChatCompletionStream = async (
 
   const stream = response.body;
   return stream;
+};
+
+export const getChatEmbedding = async (
+  apiKey: string,
+  input: string
+) => {
+  const response = await fetch(endpoint_embedding, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({
+      model: "text-embedding-ada-002",
+      input
+    }),
+  });
+  if (!response.ok) throw new Error(await response.text());
+
+  const data = await response.json();
+  return data;
 };

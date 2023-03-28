@@ -47,7 +47,7 @@ const Chat = (model: any) => {
     // legacy local storage
     try {
       const chats: ChatInterface[] = JSON.parse(oldChats);
-      if (chats.length > 0) {
+      if (chats?.length > 0) {
         setChats(chats);
         setCurrentChatIndex(0);
       } else {
