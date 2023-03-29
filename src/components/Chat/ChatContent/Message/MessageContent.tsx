@@ -312,7 +312,7 @@ const EditView = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if ((e.ctrlKey || e.shiftKey) && e.key === 'Enter') {
+    if (e.key === 'Enter') {
       e.preventDefault();
       if (sticky) {
         handleSaveAndSubmit();
@@ -344,6 +344,7 @@ const EditView = ({
       JSON.stringify(useStore.getState().chats)
     );
     const updatedMessages = updatedChats[currentChatIndex].messages;
+    
     if (sticky) {
       if (_content !== '') {
         updatedMessages.push({ role: inputRole, content: _content });

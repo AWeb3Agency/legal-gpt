@@ -58,13 +58,13 @@ function ChatPage() {
           </div>
 
           <div className="mx-auto max-w-2xl mt-10 mb-12 lg:max-w-4xl">
-          <div className="options">
+          <div className="options" style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', width: '100%'}}>
 
             {
               !loading && models.length > 0 && models.map((model: any, i: number) => {
                 console.log(model)
                 return (
-                  <Link to={`/chat/${model.id}`} className={`option active`} style={{ backgroundImage: `url(${model.cover})` }}>
+                  <Link key={`option_${i}`} to={`/chat/${model.id}`} className={`option active`} style={{ backgroundImage: `url(${model.cover})`, width: '45%', margin: '10px' }}>
                       <div className="shadow" />
                       <div className="label">
                         <div className="icon">

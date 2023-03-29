@@ -17,7 +17,7 @@ function ChatPage() {
   const session_obj = typeof session === 'string' ? JSON.parse(session) : session
   
   let { chatId } = useParams();
-  const [model, setModel] = useState('')
+  const [model, setModel] = useState() as any
   const [subscription, setSubscription] = useState('') as any
   const [loading, setLoading] = useState(true)
   const [docs, setDocs] = useState([])
@@ -32,7 +32,7 @@ function ChatPage() {
     setModel(data[0]);
     !data[0].bucket && setLoading(false);
 
-    !error && data[0].bucket && getDocs(data[0].bucket)
+    !error && data[0].bucket && getDocs(data[0].bucket, data[0])
   }
 
   async function getSuscription() {
@@ -46,15 +46,18 @@ function ChatPage() {
       data.length > 0 && setSubscription(data);
   }
 
-  async function getDocs(bucket: string) {
+  async function getDocs(bucket: string, model: any) {
     const { data, error } = await supabase
       .storage
       .from('legal-gpt')
       .list(bucket)
 
     setDocs(data)
+    setModel({
+      ...model,
+      docs: data
+    });
     setLoading(false);
-    console.log(data);
   }
 
   useEffect(()=>{

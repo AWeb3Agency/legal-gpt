@@ -22,7 +22,6 @@ export const defaultChatConfig = (): ConfigInterface => {
 
 export const generateDefaultChat = (title?: string): ChatInterface => {
   const currentmodel = useStore.getState().currentmodel;
-  
   return {
     title: title ? title : 'New Chat',
     messages: currentmodel.model_messages,

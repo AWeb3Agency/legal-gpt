@@ -1,10 +1,14 @@
 import React from 'react';
 import useStore from '@store/store';
 import { ChatInterface, MessageInterface } from '@type/chat';
-import { getChatCompletion, getChatCompletionStream } from '@api/api';
+import { getChatCompletion, getChatCompletionStream, getChatEmbedding } from '@api/api';
 import { parseEventSource } from '@api/helper';
 import { limitMessageTokens } from '@utils/messageUtils';
 import { defaultChatConfig } from '@constants/chat';
+import GPT3Tokenizer from 'gpt3-tokenizer';
+
+// @ts-ignore
+import { supabase } from '../utils/supabaseClient'
 
 const useSubmit = () => {
   const error = useStore((state) => state.error);
@@ -15,7 +19,8 @@ const useSubmit = () => {
   const generating = useStore((state) => state.generating);
   const currentChatIndex = useStore((state) => state.currentChatIndex);
   const setChats = useStore((state) => state.setChats);
-
+  const currentmodel = useStore((state) => state.currentmodel);
+  
   const generateTitle = async (
     message: MessageInterface[]
   ): Promise<string> => {
@@ -37,6 +42,19 @@ const useSubmit = () => {
     return data.choices[0].message.content;
   };
 
+  function getUniqueValues(array: any, property: any) {
+    const uniqueValues = [];
+    const seenValues = new Set();
+    for (const obj of array) {
+      const value = obj[property];
+      if (!seenValues.has(value)) {
+        seenValues.add(value);
+        uniqueValues.push(value);
+      }
+    }
+    return uniqueValues;
+  }  
+
   const handleSubmit = async () => {
     const chats = useStore.getState().chats;
     if (generating || !chats) return;
@@ -49,15 +67,84 @@ const useSubmit = () => {
     });
 
     setChats(updatedChats);
-    setGenerating(true);
+    setGenerating(true); 
 
     try {
       let stream;
-      const messages = limitMessageTokens(
+      let messages = limitMessageTokens(
         chats[currentChatIndex].messages,
         4000
       );
       if (messages.length === 0) throw new Error('Message exceed max token!');
+
+      // currentmodel.free: 3
+      // currentmodel.basic: 1
+      // currentmodel.premium: 2
+      if (currentmodel.plan === 1){
+        // here we need to get the vectors
+        const lastComment = messages.slice(-1).pop()
+              
+        // Generate a one-time embedding for the query itself
+        const embeddingResponse = await getChatEmbedding(apiKey || '', lastComment?.content || '')
+        // console.log(embeddingResponse);
+
+        const [{ embedding }] = embeddingResponse.data
+
+        // In production we should handle possible errors
+        const { data: documents } = await supabase.rpc("match_documents", {
+          query_embedding: embedding,
+          similarity_threshold: 0.6, // Choose an appropriate threshold for your data
+          match_count: 25, // Choose the number of matches
+        })
+
+        console.log(documents);
+
+        const tokenizer = new GPT3Tokenizer({ type: 'gpt3' })
+        let tokenCount = 0
+        let contextText = ''
+
+        // Concat matched documents
+        for (let i = 0; i < documents.length; i++) {
+          const document = documents[i]
+          const content = document.content
+          const docRef = document.document
+          const encoded = tokenizer.encode(content)
+          tokenCount += encoded.text.length
+
+          // Limit context to max 1500 tokens (configurable)
+          if (tokenCount > 1500) {
+            break
+          }
+
+          contextText += `content: ${content.trim()}\n---\ndocument: https://cvggmccajkyxxruselro.supabase.co/storage/v1/object/public/legal-gpt/asistente-legal/${docRef}\n---\n`
+        }
+
+        const prompt = `
+          Dada la siguiente información que tienes, 
+          responde la pregunta usando sólo la informacion 
+          que tienes y que te estoy pasando en "Context".
+          Nunca inventes informacion que no tienes,
+          si no estás seguro y la respuesta no está escrita explícitamente
+          en el Contexto, responde de la siguiente manera:
+          "Lo siento, no sé cómo responderte a eso".
+          Si sabes la respuesta, trata de ser preciso y claro,
+          
+          Tambien siempre citame el documento correspondiente a la respuesta.
+          
+          Context:
+          ${contextText}
+
+          Question: """
+          ${lastComment?.content}
+          """
+        `
+
+        // we override the messages to advoid sending all the messages to the bot
+        messages = [{
+          role: 'user',
+          content: prompt
+        }];
+      }
 
       if (apiFree) {
         stream = await getChatCompletionStream(
@@ -156,5 +243,6 @@ const useSubmit = () => {
 
   return { handleSubmit, error };
 };
+
 
 export default useSubmit;

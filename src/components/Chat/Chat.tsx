@@ -9,9 +9,10 @@ import useSaveToLocalStorage from '@hooks/useSaveToLocalStorage';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
 
-const Chat = (model: any) => {
+const Chat = (model: any, subscription: any, docs: any) => {
   // here we have all the model's configuration
   const setCurrentModel = useStore((state) => state.setCurrentModel);
+  
   // TODO: fix object
   setCurrentModel(model.model);
   // console.log(model);

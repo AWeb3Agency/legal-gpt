@@ -73,7 +73,7 @@ export const getChatEmbedding = async (
   input: string
 ) => {
   const response = await fetch(endpoint_embedding, {
-    method: 'GET',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${apiKey}`,
