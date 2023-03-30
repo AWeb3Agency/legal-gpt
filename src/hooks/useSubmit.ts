@@ -74,7 +74,7 @@ const useSubmit = () => {
       let messages = limitMessageTokens(
         chats[currentChatIndex].messages,
         4000
-      );
+      ) as any;
       if (messages.length === 0) throw new Error('Message exceed max token!');
 
       // currentmodel.free: 3
@@ -119,31 +119,47 @@ const useSubmit = () => {
           contextText += `content: ${content.trim()}\n---\ndocument: https://cvggmccajkyxxruselro.supabase.co/storage/v1/object/public/legal-gpt/asistente-legal/${docRef}\n---\n`
         }
 
-        const prompt = `
-          Dada la siguiente información que tienes, 
-          responde la pregunta usando sólo la informacion 
-          que tienes y que te estoy pasando en "Context".
-          Nunca inventes informacion que no tienes,
-          si no estás seguro y la respuesta no está escrita explícitamente
-          en el Contexto, responde de la siguiente manera:
-          "Lo siento, no sé cómo responderte a eso".
-          Si sabes la respuesta, trata de ser preciso y claro,
-          
-          Tambien siempre citame el documento correspondiente a la respuesta.
-          
-          Context:
+        const full_message = `
+          ${currentmodel.default_system_message}
           ${contextText}
 
-          Question: """
+          Pregunta: """
           ${lastComment?.content}
           """
         `
-
-        // we override the messages to advoid sending all the messages to the bot
-        messages = [{
+        const prompt = [{
           role: 'user',
-          content: prompt
+          content: full_message
         }];
+
+        // remove assistant responses
+        const cleanAssistentRes = messages.filter((m: any)=> !m.content.includes("Lo siento"))
+        
+        // remove responses that are the same
+        const removeDuplicates = (cleanAssistentRes: any) => Array.from(new Set(cleanAssistentRes.map(JSON.stringify))).map((i:any) => JSON.parse(i));
+        
+        if (removeDuplicates(cleanAssistentRes).length > 10){
+          // limit context to last 5 prompts (due to token limits)
+          const limit_context_prompts = 5;
+          const firstTrim = (messages:any, limit_context_prompts: number) => messages.length > limit_context_prompts ? messages.slice(0,limit_context_prompts) : messages;
+          console.log(messages, messages.slice(0,limit_context_prompts));
+          
+          const lastTrim = (messages:any, limit_context_prompts: number) => messages.length > limit_context_prompts ? messages.slice(-limit_context_prompts) : messages;
+          console.log(firstTrim(messages, limit_context_prompts), lastTrim(messages, limit_context_prompts), messages);
+          // override messages
+          messages = [
+            ...firstTrim(removeDuplicates(cleanAssistentRes), limit_context_prompts), 
+            ...lastTrim(removeDuplicates(cleanAssistentRes), limit_context_prompts),
+            ...prompt
+          ];
+        } else {
+          // override messages
+          messages = [
+            ...removeDuplicates(cleanAssistentRes),
+            ...prompt
+          ]
+        }
+        console.log(messages);
       }
 
       if (apiFree) {
