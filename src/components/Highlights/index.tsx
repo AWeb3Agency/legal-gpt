@@ -38,7 +38,7 @@ export default function Highlights() {
             <dl className="grid max-w-xl grid-cols-1 gap-y-10 gap-x-8 lg:max-w-none lg:grid-cols-2 lg:gap-y-16">
                 <div className="relative">
                     <dt className="highlight-img-container text-base font-semibold leading-7 text-gray-900">
-                        <div className="highlight-img top-0 left-0 flex h-50 w-50 items-top justify-center rounded-lg" style={{ backgroundImage: `url(${model.cover})` }}>
+                        <div className="highlight-img top-0 left-0 flex h-50 w-50 items-top justify-center " style={{ backgroundImage: `url(${model.cover})` }}>
                         </div>
                     </dt>
                 </div>
