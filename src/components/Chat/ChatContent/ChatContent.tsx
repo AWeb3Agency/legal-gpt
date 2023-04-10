@@ -14,7 +14,7 @@ import DownloadChat from './DownloadChat';
 const ChatContent = () => {
   const inputRole = useStore((state) => state.inputRole);
   const setError = useStore((state) => state.setError);
-  const messages = useStore((state) =>{
+  let messages = useStore((state) =>{
     return (
       state.chats &&
       state.chats.length > 0 &&
@@ -46,6 +46,13 @@ const ChatContent = () => {
   }, [generating]);
 
   const { error } = useSubmit();
+
+  console.log(typeof messages);
+
+  if (typeof messages === 'string'){
+    messages = JSON.parse(messages);
+  }
+  
 
   return (
     <div className='flex-1 overflow-hidden'>
