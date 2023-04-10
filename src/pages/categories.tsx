@@ -53,7 +53,7 @@ function ChatPage() {
   return (
     <>
       <Header />
-      <div className="bg-white py-24 sm:py-16 sm:pt-0">
+      <div className="bg-white py-24 sm:py-16 sm:pt-0 category">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div onClick={goBack} style={{ display: 'flex' }} className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
             <span style={{ cursor: 'pointer', marginLeft: 10, marginRight: 15, marginTop: 5, width: '25px', position: 'relative', top: -2 }}>
@@ -84,15 +84,15 @@ function ChatPage() {
               !loading && models.length > 0 && models.map((model: any, i: number) => {
                 console.log(model)
                 return (
-                  <Link key={`option_${i}`} to={`/chat/${model.id}`} className={`option active`} style={{ backgroundImage: `url(${model.cover})`, width: '45%', margin: '10px' }}>
+                  <Link key={`option_${i}`} to={`/chat/${model.id}`} className={`option active`} style={{ backgroundImage: `linear-gradient(rgb(0 0 0),rgb(0 0 0 / 7%)), url(${model.cover})`, width: '45%', margin: '10px' }}>
                       <div className="shadow" />
                       <div className="label">
                         <div className="icon">
-                          <i className="fas fa-walking" />
+                          <i className="fas fa-question" />
                         </div>
                         <div className="info">
-                          <div className="main">{ model.title }</div>
-                          <div className="sub">{ model.description.substring(0,45) + '...' }</div>
+                          <div className="main">{ model.title.length > 140 ? model.title.substring(0,140) + '...' : model.title }</div>
+                          {/** <div className="sub">{ model.description.substring(0,45) + '...' }</div> */}
                         </div>
                       </div>
                   </Link>
