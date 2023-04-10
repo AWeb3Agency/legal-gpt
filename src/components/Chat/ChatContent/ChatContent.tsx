@@ -47,13 +47,6 @@ const ChatContent = () => {
 
   const { error } = useSubmit();
 
-  console.log(typeof messages);
-
-  if (typeof messages === 'string'){
-    messages = JSON.parse(messages);
-  }
-  
-
   return (
     <div className='flex-1 overflow-hidden'>
       <ScrollToBottom

@@ -327,6 +327,8 @@ const EditView = ({
       JSON.stringify(useStore.getState().chats)
     );
     const updatedMessages = updatedChats[currentChatIndex].messages;
+    console.log(updatedMessages);
+    
     if (sticky) {
       updatedMessages.push({ role: inputRole, content: _content });
       _setContent('');
@@ -344,6 +346,7 @@ const EditView = ({
       JSON.stringify(useStore.getState().chats)
     );
     const updatedMessages = updatedChats[currentChatIndex].messages;
+    console.log(updatedMessages);
     
     if (sticky) {
       if (_content !== '') {
